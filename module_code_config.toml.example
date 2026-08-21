@@ -1,0 +1,68 @@
+# Fichier listant les paramètres du module et leurs valeurs par défaut
+# A copier/renommer en monitoring_repro_config.toml dans le dossier config/ de GeoNature
+
+# Liste des pages (routes) du module. Chaque page combine les sites d'un ou
+# plusieurs sous-modules gn_module_monitoring sur une même carte ; chaque
+# sous-module garde ses propres critères de succès (visit_success_field,
+# success_values, default_color, default_label).
+
+# Page combinant 2 sous-modules : aigle + domaine_vital.
+[[PAGES]]
+page_code = "aigle_domaine_vital"
+page_label = "Aigle & Domaines vitaux"
+
+  [[PAGES.modules]]
+  module_code = "AIGLE"
+  module_label = "Aigle royal"
+  visit_success_field = "resultat_reproduction"
+  default_color = "#bdbdbd"
+  default_label = "Pas de donnée"
+
+    [[PAGES.modules.success_values]]
+    value = ["succes"]
+    label = "Succès"
+    color = "#66bb6a"
+
+    [[PAGES.modules.success_values]]
+    value = ["echec"]
+    label = "Échec"
+    color = "#e57373"
+
+  [[PAGES.modules]]
+  module_code = "DOMAINE_VITAL"
+  module_label = "Domaines vitaux"
+  visit_success_field = "resultat_reproduction"
+  default_color = "#bdbdbd"
+  default_label = "Pas de donnée"
+
+    [[PAGES.modules.success_values]]
+    value = ["succes"]
+    label = "Succès"
+    color = "#66bb6a"
+
+    [[PAGES.modules.success_values]]
+    value = ["echec"]
+    label = "Échec"
+    color = "#e57373"
+
+# Page dédiée à un seul sous-module : gypaète.
+[[PAGES]]
+page_code = "gypaete"
+page_label = "Gypaète barbu"
+
+  [[PAGES.modules]]
+  module_code = "GYPAETE"
+  module_label = "Gypaète barbu"
+  visit_success_field = "resultat_reproduction"
+  default_color = "#bdbdbd"
+  default_label = "Pas de donnée"
+
+    [[PAGES.modules.success_values]]
+    value = ["envol"]
+    label = "Envol réussi"
+    color = "#66bb6a"
+
+    [[PAGES.modules.success_values]]
+    value = ["echec"]
+    label = "Échec"
+    color = "#e57373"

@@ -1,0 +1,27 @@
+# Fichier listant les paramètres du module et leurs valeurs par défaut
+# A copier/renommer en monitoring_repro_config.toml dans le dossier config/ de GeoNature
+
+# Liste des sous-modules gn_module_monitoring à afficher, et pour chacun
+# le champ (déjà présent dans le "display_list" du sous-module concerné)
+# qui indique un succès de reproduction à chaque niveau.
+
+[[MODULES]]
+module_code = "AIGLE"
+module_label = "Aigle royal"
+visit_success_field = "reussite_visite"
+observation_success_field = "reussite_observation"
+item_success_field = "reussite_item"
+
+[[MODULES]]
+module_code = "DOMAINE_VITAL"
+module_label = "Domaines vitaux"
+visit_success_field = "reussite_visite"
+observation_success_field = "reussite_observation"
+item_success_field = "reussite_item"
+
+[[MODULES]]
+module_code = "GYPAETE"
+module_label = "Gypaète barbu"
+visit_success_field = "reussite_visite"
+observation_success_field = "reussite_observation"
+item_success_field = "reussite_item"

@@ -1,0 +1,80 @@
+<div class="repro-map-container card">
+  <div class="repro-map-header d-flex justify-content-between align-items-center">
+    <h5>{{ pageConfig?.page_label || pageConfig?.page_code }}</h5>
+    <repro-year-selector
+      [years]="years"
+      [selectedYear]="selectedYear"
+      (yearChange)="onYearChange($event)"
+    ></repro-year-selector>
+  </div>
+
+  <div class="repro-loading-overlay" *ngIf="loading">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <div class="repro-map-body">
+    <div class="repro-site-panel">
+      <!-- Un onglet par sous-module de la page. -->
+      <mat-tab-group class="repro-site-tabs">
+        <mat-tab *ngFor="let moduleConfig of pageConfig?.modules">
+          <ng-template mat-tab-label>
+            <span>{{ moduleConfig.module_label || moduleConfig.module_code }}</span>
+            <a
+              mat-mini-fab
+              color="primary"
+              class="repro-tab-add-fab"
+              disableRipple="true"
+              [routerLink]="['/monitorings', 'object', moduleConfig.module_code, 'site', 'create']"
+              [queryParams]="{ parents_path: 'module' }"
+              [matTooltip]="
+                'Ajouter un site ' + (moduleConfig.module_label || moduleConfig.module_code)
+              "
+              (click)="$event.stopPropagation()"
+            >
+              <mat-icon>add</mat-icon>
+            </a>
+          </ng-template>
+          <repro-site-list
+            [moduleConfig]="moduleConfig"
+            [sites]="sitesByModuleCode[moduleConfig.module_code]"
+            [selectedSiteId]="selectedSiteId"
+            (siteClick)="selectSite($event)"
+          ></repro-site-list>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <div class="repro-map-map">
+      <pnx-map height="100%" [zoom]="6">
+        <pnx-geojson
+          *ngIf="geojsonSites"
+          [geojson]="geojsonSites"
+          [onEachFeature]="onEachSiteFeature"
+          [zoomOnFirstTime]="true"
+        ></pnx-geojson>
+      </pnx-map>
+
+      <!-- Une légende par sous-module : les success_values ne sont pas les mêmes d'un sous-module à l'autre. -->
+      <div class="repro-legend">
+        <div class="repro-legend-group" *ngFor="let moduleConfig of pageConfig?.modules">
+          <div class="repro-legend-title">
+            {{ moduleConfig.module_label || moduleConfig.module_code }}
+          </div>
+          <div class="repro-legend-item" *ngFor="let value of moduleConfig.success_values">
+            <span class="repro-legend-swatch" [style.backgroundColor]="value.color"></span>
+            {{ value.label }}
+          </div>
+          <div class="repro-legend-item">
+            <span
+              class="repro-legend-swatch"
+              [style.backgroundColor]="moduleConfig.default_color"
+            ></span>
+            {{ moduleConfig.default_label }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <repro-visit-panel class="repro-visit-panel-container" [site]="selectedSite"></repro-visit-panel>
+  </div>
+</div>

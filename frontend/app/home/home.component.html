@@ -1,0 +1,12 @@
+<div class="home-container">
+  <div class="d-flex flex-wrap justify-content-center align-items-stretch gap">
+    <a *ngFor="let page of pages" [routerLink]="[page.page_code]" class="home-card">
+      <i class="fa fa-map-o home-card-icon" aria-hidden="true"></i>
+      <div class="home-card-title">{{ page.page_label || page.page_code }}</div>
+    </a>
+
+    <p *ngIf="pages.length === 0" class="text-muted">
+      Aucune page configurée. Renseignez PAGES dans monitoring_repro_config.toml.
+    </p>
+  </div>
+</div>

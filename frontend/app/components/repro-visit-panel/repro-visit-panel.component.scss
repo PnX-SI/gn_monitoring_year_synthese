@@ -1,0 +1,57 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.repro-visit-panel {
+  height: 100%;
+  overflow-y: auto;
+  padding: 0.5em;
+}
+
+.repro-visit-panel-title {
+  margin-bottom: 0;
+}
+
+.repro-visit-panel-module {
+  margin-bottom: 1em;
+}
+
+.repro-visit-panel-empty {
+  padding: 1em 0;
+}
+
+// Projeté directement dans mat-expansion-panel-header (3e ng-content, en
+// dehors de mat-panel-title) : margin-left: auto le pousse à droite dans le
+// flex row du header, sans dépendre des classes internes de Material.
+.repro-visit-panel-info-link {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  .mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.repro-visit-panel-field {
+  display: flex;
+  flex-direction: column;
+  padding: 0.3em 0;
+  font-size: 0.85em;
+  border-bottom: 1px solid #eef0f2;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.repro-visit-panel-field-label {
+  color: #777;
+}
+
+.repro-visit-panel-field-value {
+  overflow-wrap: break-word;
+}

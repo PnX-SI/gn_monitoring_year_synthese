@@ -1,0 +1,49 @@
+.repro-site-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  height: 100%;
+}
+
+.repro-site-table-wrapper {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.repro-site-table {
+  width: 100%;
+}
+
+.repro-site-row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.repro-site-row-selected {
+  background-color: #e3f2fd;
+
+  &:hover {
+    background-color: #e3f2fd;
+  }
+}
+
+.repro-site-empty {
+  padding: 0.5em;
+}
+
+.mat-column-success,
+.mat-column-detail {
+  width: 2em;
+  text-align: center;
+}
+
+.repro-site-badge {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}

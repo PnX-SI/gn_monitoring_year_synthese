@@ -1,0 +1,11 @@
+{
+  "name": "gn_module_monitoring_repro",
+  "version": "1.0.0",
+  "description": "Frontend pour gn_module_monitoring_repro",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Théo Lechémia",
+  "license": "MIT",
+  "dependencies": {}
+}

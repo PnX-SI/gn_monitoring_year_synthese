@@ -1,0 +1,40 @@
+<div class="repro-visit-panel">
+  <ng-container *ngIf="site; else noSite">
+    <h6 class="repro-visit-panel-title">{{ site.base_site_name }}</h6>
+    <p class="text-muted repro-visit-panel-module">{{ site.module_label }}</p>
+
+    <mat-accordion *ngIf="site.visites?.length; else noVisit" class="repro-visit-panel-list">
+      <mat-expansion-panel *ngFor="let visite of sortedVisites">
+        <mat-expansion-panel-header class="mr-3">
+          <mat-panel-title>{{ visite.visit_date_min | date: 'dd/MM/yyyy' }}</mat-panel-title>
+          <a
+            class="repro-visit-panel-info-link"
+            [routerLink]="['/monitorings', 'object', site.module_code, 'visit', visite.id_base_visit]"
+            target="_blank"
+            (click)="$event.stopPropagation()"
+            title="Voir la fiche de la visite"
+          >
+            <mat-icon>info</mat-icon>
+          </a>
+        </mat-expansion-panel-header>
+
+        <div class="repro-visit-panel-field" *ngFor="let field of genericFields(visite)">
+          <span class="repro-visit-panel-field-label">{{ field.key  | titlecase}}</span>
+          <span class="repro-visit-panel-field-value">{{ field.value }}</span>
+        </div>
+
+        <div class="repro-visit-panel-field" *additionalFields="let field of visite.data">
+          <span class="repro-visit-panel-field-label">{{ field.label | titlecase }}</span>
+          <span class="repro-visit-panel-field-value">{{ field.value }}</span>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <ng-template #noVisit>
+      <p class="text-muted">Aucun contrôle cette année</p>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #noSite>
+    <p class="text-muted repro-visit-panel-empty">Cliquez sur un site pour voir ses contrôles</p>
+  </ng-template>
+</div>
