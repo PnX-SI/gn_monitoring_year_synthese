@@ -1,11 +1,24 @@
 <div class="repro-map-container card">
   <div class="repro-map-header d-flex justify-content-between align-items-center">
     <h5>{{ pageConfig?.page_label || pageConfig?.page_code }}</h5>
-    <repro-year-selector
-      [years]="years"
-      [selectedYear]="selectedYear"
-      (yearChange)="onYearChange($event)"
-    ></repro-year-selector>
+    <div class="d-flex align-items-center">
+      <repro-year-selector
+        [years]="years"
+        [selectedYear]="selectedYear"
+        (yearChange)="onYearChange($event)"
+      ></repro-year-selector>
+      <a
+        *ngIf="hasVisitExport"
+        mat-mini-fab
+        color="primary"
+        class="repro-header-download-fab"
+        disableRipple="true"
+        matTooltip="Télécharger toutes les visites de l'année"
+        (click)="downloadAllVisits()"
+      >
+        <mat-icon>file_download</mat-icon>
+      </a>
+    </div>
   </div>
 
   <div class="repro-loading-overlay" *ngIf="loading">
@@ -18,7 +31,7 @@
       <mat-tab-group class="repro-site-tabs">
         <mat-tab *ngFor="let moduleConfig of pageConfig?.modules">
           <ng-template mat-tab-label>
-            <span>{{ moduleConfig.module_label || moduleConfig.module_code }}</span>
+            <span class="tab-label">{{ moduleConfig.module_label || moduleConfig.module_code }}</span>
             <a
               mat-mini-fab
               color="primary"
@@ -32,6 +45,18 @@
               (click)="$event.stopPropagation()"
             >
               <mat-icon>add</mat-icon>
+            </a>
+            <a
+              mat-mini-fab
+              color="primary"
+              class="repro-tab-download-fab"
+              disableRipple="true"
+              [matTooltip]="
+                'Télécharger les sites ' + (moduleConfig.module_label || moduleConfig.module_code)
+              "
+              (click)="$event.stopPropagation(); downloadModuleSites(moduleConfig)"
+            >
+              <mat-icon>file_download</mat-icon>
             </a>
           </ng-template>
           <repro-site-list
@@ -54,27 +79,29 @@
         ></pnx-geojson>
       </pnx-map>
 
-      <!-- Une légende par sous-module : les success_values ne sont pas les mêmes d'un sous-module à l'autre. -->
+      <!-- Une légende par sous-module : les legend_values ne sont pas les mêmes d'un sous-module à l'autre. -->
       <div class="repro-legend">
         <div class="repro-legend-group" *ngFor="let moduleConfig of pageConfig?.modules">
           <div class="repro-legend-title">
             {{ moduleConfig.module_label || moduleConfig.module_code }}
           </div>
-          <div class="repro-legend-item" *ngFor="let value of moduleConfig.success_values">
-            <span class="repro-legend-swatch" [style.backgroundColor]="value.color"></span>
-            {{ value.label }}
-          </div>
-          <div class="repro-legend-item">
+          <div class="repro-legend-item" *ngFor="let value of moduleConfig.legend_values">
             <span
               class="repro-legend-swatch"
-              [style.backgroundColor]="moduleConfig.default_color"
+              [style.backgroundColor]="moduleConfig.site_geom_type === 'point' ? null : value.color"
+              [style.borderColor]="moduleConfig.site_geom_type === 'point' ? value.color : null"
             ></span>
-            {{ moduleConfig.default_label }}
+            {{ value.label }}
           </div>
         </div>
       </div>
     </div>
 
-    <repro-visit-panel class="repro-visit-panel-container" [site]="selectedSite"></repro-visit-panel>
+    <repro-visit-panel
+      class="repro-visit-panel-container"
+      [site]="selectedSite"
+      [moduleConfig]="selectedModuleConfig"
+      [selectedYear]="selectedYear"
+    ></repro-visit-panel>
   </div>
 </div>

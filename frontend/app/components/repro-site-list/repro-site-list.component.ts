@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ReproModuleConfig, ReproSuccessValue } from '../../interfaces/repro-config.interface';
+import { ReproModuleConfig } from '../../interfaces/repro-config.interface';
 
 /**
  * Tableau filtrable des sites d'un sous-module, avec ligne de détail
@@ -31,14 +31,6 @@ export class ReproSiteListComponent {
       return sites;
     }
     return sites.filter((site) => site.base_site_name?.toLowerCase().includes(filter));
-  }
-
-  resultColor(result: ReproSuccessValue | null): string {
-    return result?.color || this.moduleConfig.default_color || '#bdbdbd';
-  }
-
-  resultLabel(result: ReproSuccessValue | null): string {
-    return result?.label || this.moduleConfig.default_label || 'Pas de donnée';
   }
 
   onRowClick(site: any) {

@@ -39,7 +39,7 @@
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 4px;
   padding: 0.5em 0.75em;
-  font-size: 0.85em;
+  font-size: 0.5em;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.15);
 }
 
@@ -68,11 +68,16 @@
   }
 }
 
+.tab-label {
+  font-size: 0.8em;
+}
+
 .repro-legend-swatch {
   display: inline-block;
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  border: 0.1em solid #000;
   flex-shrink: 0;
 }
 
@@ -89,12 +94,40 @@
   border-left: 1px solid #e0e0e0;
 }
 
-.repro-tab-add-fab {
+.repro-tab-add-fab,
+.repro-tab-download-fab {
+  color : #fff;
   // mat-mini-fab est trop grand pour la barre d'onglets : on le réduit avec
   // un transform (contrairement à width/height, ça met aussi le ripple et
   // le touch-target interne à l'échelle, donc pas de halo au hover).
   transform: scale(0.6);
   margin-left: -0.25em;
+
+  // Un <a mat-mini-fab> reste un lien : sans ça, la couleur de lien (bleue)
+  // du navigateur/bootstrap prend le dessus sur l'icône au survol.
+  &,
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited,
+  &:link {
+    color: #fff !important;
+    text-decoration: none;
+  }
+}
+
+.repro-header-download-fab {
+  margin-left: 0.75em;
+
+  &,
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited,
+  &:link {
+    color: #fff !important;
+    text-decoration: none;
+  }
 }
 
 .repro-site-tabs {

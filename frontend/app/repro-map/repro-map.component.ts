@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MapService } from '@geonature_common/map/map.service';
+import { MonitoringPaginatedResult } from '../interfaces/monitoring.interface';
+import { downloadBlob } from '../utils/download.util';
 
 import { MonitoringApiService } from '../services/monitoring-api.service';
-import { ReproSuccessService } from '../services/repro-success.service';
+import { ReproLegendService } from '../services/repro-legend.service';
 import { ReproModuleConfig, ReproPageConfig } from '../interfaces/repro-config.interface';
 
 @Component({
@@ -26,55 +28,65 @@ export class ReproMapComponent implements OnInit {
   selectedSiteId: number | null = null;
   private selectedModuleCode: string | null = null;
 
+  /** Visites du site sélectionné pour l'année en cours, cf. loadSelectedSiteVisites. */
+  private selectedSiteVisites: any[] = [];
+
   private siteLayersById = new Map<number, any>();
 
-  /**
-   * Dérivé de sitesByModuleCode plutôt que stocké à part : évite de garder
-   * une référence périmée vers l'ancienne année quand sitesByModuleCode est
-   * recalculé (changement d'année).
-   */
   get selectedSite(): any | null {
     if (this.selectedSiteId === null || !this.selectedModuleCode) {
       return null;
     }
-    return (this.sitesByModuleCode[this.selectedModuleCode] || []).find(
+    const site = (this.sitesByModuleCode[this.selectedModuleCode] || []).find(
       (site) => site.id_base_site === this.selectedSiteId
     );
+    return site ? { ...site, visites: this.selectedSiteVisites } : null;
+  }
+
+  /** Config du sous-module du site sélectionné (pour repro-visit-panel : visit_label_field). */
+  get selectedModuleConfig(): ReproModuleConfig | null {
+    return this.pageConfig?.modules.find((m) => m.module_code === this.selectedModuleCode) ?? null;
+  }
+
+  /** Au moins un sous-module de la page déclare visit_export_name (bouton "télécharger toutes les visites"). */
+  get hasVisitExport(): boolean {
+    return !!this.pageConfig?.modules.some((m) => m.visit_export_name);
   }
 
   onEachSiteFeature = (feature: any, layer: any) => {
-    const { result, default_color, default_label } = feature.properties;
-    const color = result?.color || default_color;
+    const { result } = feature.properties;
     const isPoint = feature.geometry?.type === 'Point' || feature.geometry?.type === 'MultiPoint';
 
     // Points : couleur sur le contour, fond transparent. Polygones : couleur sur le fond.
-    layer.setStyle(
-      isPoint
-        ? {
-            color,
-            weight: 4,
-            fillOpacity: 0,
-            radius: 6,
-          }
-        : {
-            color: '#000',
-            weight: 1,
-            fillColor: color,
-            fillOpacity: result ? 0.7 : 0.3,
-          }
-    );
+    // Un site sans résultat connu (pas de *no_data/*no_match déclaré pour ce module) n'a
+    // pas de couleur : on omet alors la clé color/fillColor plutôt que de la passer à
+    // `undefined`, sans quoi Leaflet écraserait sa couleur par défaut avec `undefined` et
+    // le rendu Canvas hériterait de la dernière couleur valide tracée juste avant sur le
+    // canvas partagé (un site voisin pris au hasard), au lieu du bleu Leaflet par défaut.
+    const style: any = isPoint
+      ? { weight: 4, fillOpacity: 0, radius: 6 }
+      : { color: '#000', weight: 1, fillOpacity: result ? 0.7 : 0.3 };
+    if (result) {
+      style[isPoint ? 'color' : 'fillColor'] = result.color;
+    }
+    layer.setStyle(style);
 
-    const label = result?.label || default_label;
-    layer.bindPopup(`<b>${feature.properties.base_site_name}</b><br>${this.selectedYear} : ${label}`);
+    layer.bindPopup(this.buildPopupContent(feature.properties, result?.label ?? 'Pas de donnée'));
     layer.on('click', () => this.selectSite(feature.properties));
     this.siteLayersById.set(feature.properties.id_base_site, layer);
   };
+
+  private buildPopupContent(properties: any, resultLabel: string): string {
+    let content = `<b>${properties.base_site_name}</b><br>${this.selectedYear} : ${resultLabel}`;
+    content += `<br>id_base_site : ${properties.id_base_site}`;
+    return content;
+  }
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _monitoringApi: MonitoringApiService,
-    private _reproSuccess: ReproSuccessService,
+    private _reproSuccess: ReproLegendService,
     private _mapService: MapService
   ) {}
 
@@ -129,6 +141,7 @@ export class ReproMapComponent implements OnInit {
   selectSite(site: any) {
     this.selectedSiteId = site.id_base_site;
     this.selectedModuleCode = site.module_code;
+    this.loadSelectedSiteVisites(site);
 
     const layer = this.siteLayersById.get(site.id_base_site);
     if (!layer) {
@@ -142,14 +155,41 @@ export class ReproMapComponent implements OnInit {
     layer.openPopup();
   }
 
+  /**
+   * Visites du site sélectionné pour l'année en cours. Si le module déclare
+   * visit_export_name, on interroge sa vue d'export (filtrée par année et
+   * id_base_site) ; sinon on appelle la route de monitoring
+   */
+  private loadSelectedSiteVisites(site: any) {
+    this.selectedSiteVisites = [];
+
+    const moduleConfig = this.selectedModuleConfig;
+    if (!moduleConfig) {
+      return;
+    }
+
+    const visites$: Observable<any[]> = moduleConfig.visit_export_name
+      ? this._monitoringApi.getVisitsExport(site.module_code, moduleConfig.visit_export_name, {
+          annee: this.selectedYear,
+          id_base_site: site.id_base_site,
+        })
+      : this._monitoringApi
+          .getVisits(site.module_code, {
+            id_base_site: site.id_base_site,
+            visit_date_min: this.selectedYear,
+          })
+          .pipe(map((result: MonitoringPaginatedResult<any>) => result.items || []));
+
+    visites$.subscribe((visites: any[]) => {
+        this.selectedSiteVisites = visites;
+    });
+  }
+
   private loadSitesForYear(year: number) {
     this.loading = true;
 
-    // Un sous-module = un appel identique aux autres, juste avec sa propre
-    // config de succès. On agrège ensuite tout pour la carte, et on garde
-    // le détail par sous-module pour les onglets de la liste.
     const perModule$ = this.pageConfig.modules.map((moduleConfig) =>
-      this.loadModuleSites(moduleConfig, year)
+      this.loadSites(moduleConfig, year)
     );
 
     forkJoin(perModule$).subscribe((results: { moduleCode: string; sites: any[] }[]) => {
@@ -171,40 +211,58 @@ export class ReproMapComponent implements OnInit {
     });
   }
 
-  /** Sites (en features geojson) d'un sous-module, avec leur résultat de reproduction de l'année. */
-  private loadModuleSites(
+  downloadModuleSites(moduleConfig: ReproModuleConfig) {
+    this._monitoringApi
+      .downloadExport(moduleConfig.module_code, moduleConfig.site_export_name, {
+        annee: this.selectedYear,
+      })
+      .subscribe((blob: Blob) => {
+        downloadBlob(blob, `${moduleConfig.module_code}_${moduleConfig.site_export_name}_${this.selectedYear}.csv`);
+      });
+  }
+
+
+  downloadAllVisits() {
+    for (const moduleConfig of this.pageConfig?.modules || []) {
+      if (!moduleConfig.visit_export_name) {
+        continue;
+      }
+      this._monitoringApi
+        .downloadExport(moduleConfig.module_code, moduleConfig.visit_export_name, {
+          annee: this.selectedYear,
+        })
+        .subscribe((blob: Blob) => {
+          downloadBlob(
+            blob,
+            `${moduleConfig.module_code}_${moduleConfig.visit_export_name}_${this.selectedYear}.csv`
+          );
+        });
+    }
+  }
+
+  private loadSites(
     moduleConfig: ReproModuleConfig,
     year: number
   ): Observable<{ moduleCode: string; sites: any[] }> {
     const moduleCode = moduleConfig.module_code;
 
-    return forkJoin({
-      sitesGeojson: this._monitoringApi.getSitesGeometries(moduleCode),
-      visits: this._monitoringApi.getVisitsByYear(moduleCode, year),
-    }).pipe(
-      map(({ sitesGeojson, visits }: { sitesGeojson: any; visits: any[] }) => {
-        const sites = (sitesGeojson.features || []).map((feature: any) => {
-          // id_base_site vient de 2 endpoints différents (geometries vs
-          // visits) : on compare en Number() au cas où l'un des deux le
-          // sérialise en chaîne.
-          const siteVisits = visits.filter(
-            (visit: any) => Number(visit.id_base_site) === Number(feature.properties.id_base_site)
-          );
-          return {
-            ...feature,
+    return this._monitoringApi
+      .getSitesExport(moduleCode, moduleConfig.site_export_name, { annee: year })
+      .pipe(
+        map((rows: any[]) => ({
+          moduleCode,
+          sites: rows.map((row) => ({
+            type: 'Feature',
+            geometry: JSON.parse(row.geom),
             properties: {
-              ...feature.properties,
+              id_base_site: Number(row.id_base_site),
+              base_site_name: row.base_site_name,
               module_code: moduleCode,
               module_label: moduleConfig.module_label || moduleCode,
-              default_color: moduleConfig.default_color,
-              default_label: moduleConfig.default_label,
-              visites: siteVisits,
-              result: this._reproSuccess.getSiteResult(siteVisits, moduleConfig),
+              result: this._reproSuccess.getSiteResult(row, moduleConfig),
             },
-          };
-        });
-        return { moduleCode, sites };
-      })
-    );
+          })),
+        }))
+      );
   }
 }

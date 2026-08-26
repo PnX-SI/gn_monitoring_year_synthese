@@ -9,6 +9,60 @@
   padding: 0.5em;
 }
 
+.repro-visit-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.panel-title {
+  font-size: 0.8em;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  margin-right: 0.5em;
+
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+// mat-expansion-panel-header a une hauteur fixe et .mat-content un
+// overflow: hidden par défaut : sans ça, un titre sur 2 lignes serait rogné
+// et le bouton "info" (poussé par margin-left: auto) resterait invisible.
+::ng-deep .repro-visit-panel-list .mat-expansion-panel-header {
+  height: auto;
+  min-height: 48px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+::ng-deep .repro-visit-panel-list .mat-content {
+  overflow: visible;
+}
+
+
+.repro-visit-panel-header-actions {
+  display: flex;
+  gap: 0.25em;
+  flex-shrink: 0;
+}
+
+.repro-visit-panel-add-fab,
+.repro-visit-panel-download-fab {
+  transform: scale(0.7);
+  flex-shrink: 0;
+
+  &,
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited,
+  &:link {
+    color: #fff!important;
+    text-decoration: none;
+  }
+}
+
 .repro-visit-panel-title {
   margin-bottom: 0;
 }
@@ -28,6 +82,9 @@
   display: flex;
   align-items: center;
   margin-left: auto;
+  margin-right: 5px;
+  // Ne doit jamais se faire écraser par un titre long/sur 2 lignes.
+  flex-shrink: 0;
 
   .mat-icon {
     font-size: 18px;

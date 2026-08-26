@@ -1,7 +1,1 @@
-- renommer PAGES.modules.success_values en PAGES.modules.legend_values
-- tester la légende sur le sous module aire + gypaète
-- ajouter un "statut_reproduction" sur gypaete
-- reprendre les couleur du module aigle
-- faire une PR sur monitoring pour avoir les observers sur /visits
-- dans le détail des controle, ne mettre que les items que l'on veux, et en plus joli
-- utiliser la directive additionalFields quand ce sera mergé
+- voir les visite du module aire aigle qui n'ont pas de date ?

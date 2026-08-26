@@ -12,8 +12,8 @@
         <td mat-cell *matCellDef="let site">
           <span
             class="repro-site-badge"
-            [style.backgroundColor]="resultColor(site.result)"
-            [title]="resultLabel(site.result)"
+            [style.backgroundColor]="site.result?.color"
+            [title]="site.result?.label"
           ></span>
         </td>
       </ng-container>
@@ -32,10 +32,11 @@
               'site',
               site.id_base_site
             ]"
+            target="_blank"
             (click)="$event.stopPropagation()"
             title="Voir la fiche du site"
           >
-            <mat-icon>info</mat-icon>
+            <mat-icon color="primary">info</mat-icon>
           </a>
         </td>
       </ng-container>
@@ -45,9 +46,10 @@
             [routerLink]="['/monitorings', 'create_object', moduleConfig.module_code, 'visit']"
             [queryParams]="{ id_base_site: site.id_base_site, parents_path: 'site' }"
             (click)="$event.stopPropagation()"
+            target="_blank"
             title="Ajouter une visite"
           >
-            <mat-icon>add</mat-icon>
+            <mat-icon color="primary">add</mat-icon>
           </a>
         </td>
       </ng-container>
