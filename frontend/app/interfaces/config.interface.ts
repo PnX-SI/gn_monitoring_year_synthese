@@ -12,6 +12,7 @@ export interface SubModuleConfig {
   visit_fields?: string[];
   legend_values?: LegendValue[];
   site_geom_type?: string;
+  dispay_add_button: boolean;
 
   site_export_name: string;
 

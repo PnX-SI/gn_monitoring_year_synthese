@@ -29,6 +29,7 @@ class SubModuleConfigSchema(Schema):
     site_geom_type = fields.Str(load_default="point") # poitnt ou polygone, sert à construire la légende
     site_export_name = fields.String(required=True)
     visit_export_name = fields.String()
+    dispay_add_button = fields.Boolean(load_default=True)  # afficher le bouton 'ajouter une visite' dans les listes
 
 
 class PageConfigSchema(Schema):

@@ -6,7 +6,7 @@
         <p class="text-muted visit-panel-module">{{ site.module_label }}</p>
       </div>
       <div class="visit-panel-header-actions">
-        <a
+        <a *ngIf="moduleConfig.dispay_add_button"
           mat-mini-fab
           color="primary"
           class="visit-panel-add-fab"
@@ -41,7 +41,7 @@
             [routerLink]="[
               '/monitorings',
               'object',
-              site.module_code,
+              visite.module_code || site.module_code,
               'visit',
               visite.id_base_visit
             ]"

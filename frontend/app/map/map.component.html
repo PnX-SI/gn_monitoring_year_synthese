@@ -32,7 +32,7 @@
         <mat-tab class="mb-2" *ngFor="let moduleConfig of pageConfig?.modules">
           <ng-template mat-tab-label>
             <span class="tab-label">{{ moduleConfig.module_label || moduleConfig.module_code }}</span>
-            <a
+            <a *ngIf="moduleConfig.dispay_add_button"
               mat-mini-fab
               color="primary"
               class="tab-add-fab"

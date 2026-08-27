@@ -40,9 +40,9 @@
           </a>
         </td>
       </ng-container>
-      <ng-container matColumnDef="add">
+      <ng-container  matColumnDef="add">
         <td mat-cell *matCellDef="let site">
-          <a
+          <a *ngIf="moduleConfig.dispay_add_button"
             [routerLink]="['/monitorings', 'create_object', moduleConfig.module_code, 'visit']"
             [queryParams]="{ id_base_site: site.id_base_site, parents_path: 'site' }"
             (click)="$event.stopPropagation()"
