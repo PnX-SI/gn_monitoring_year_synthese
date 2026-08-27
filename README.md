@@ -27,7 +27,7 @@ page_label = "STOM"
   [[PAGES.modules]]
   module_code = "STOM" # code du module monitoring
   module_label = "STOM"
-  site_export_name = "site_visit_count" # nom de l'export monitoring utilisé par le module
+  site_export_name = "site_visit_count" # nom de l'export monitoring utilisé par le module qui renvoie tous les sites dupliqué par an
   legend_field = "legend_field" # nom du champs de la vue ou de l'API /site utilisé pour créer la légende
   site_geom_type = "point" # -> type des objet du module monitoring
     # Légende

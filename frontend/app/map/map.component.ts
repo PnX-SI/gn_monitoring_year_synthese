@@ -169,7 +169,7 @@ export class MapComponent implements OnInit {
     }
 
     const visites$: Observable<any[]> = moduleConfig.visit_export_name
-      ? this._monitoringApi.getVisitsExport(site.module_code, moduleConfig.visit_export_name, {
+      ? this._monitoringApi.getJsonExport(site.module_code, moduleConfig.visit_export_name, {
           annee: this.selectedYear,
           id_base_site: site.id_base_site,
         })
@@ -211,11 +211,10 @@ export class MapComponent implements OnInit {
     });
   }
 
-  downloadModuleSites(moduleConfig: SubModuleConfig) {
+  downloadModuleSites(moduleConfig: SubModuleConfig, filterYear: boolean = true) {
+    const params = filterYear ? {annee: this.selectedYear} :  {}
     this._monitoringApi
-      .downloadExport(moduleConfig.module_code, moduleConfig.site_export_name, {
-        annee: this.selectedYear,
-      })
+      .downloadExport(moduleConfig.module_code, moduleConfig.site_export_name, params)
       .subscribe((blob: Blob) => {
         downloadBlob(blob, `${moduleConfig.module_code}_${moduleConfig.site_export_name}_${this.selectedYear}.csv`);
       });
@@ -247,7 +246,7 @@ export class MapComponent implements OnInit {
     const moduleCode = moduleConfig.module_code;
 
     return this._monitoringApi
-      .getSitesExport(moduleCode, moduleConfig.site_export_name, { annee: year })
+      .getJsonExport(moduleCode, moduleConfig.site_export_name, { annee: year })
       .pipe(
         map((rows: any[]) => ({
           moduleCode,

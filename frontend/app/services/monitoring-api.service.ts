@@ -28,28 +28,9 @@ export class MonitoringApiService {
   }
 
   /**
-   * Sites d'un module, un enregistrement par site et par année, déjà
-   * accompagnés de leur résultat de reproduction (voir
-   * SubModuleConfig.site_export_name), via la vue SQL
-   * gn_monitoring.v_export_<moduleCode>_<method> et la route générique
-   * d'export de gn_module_monitoring. Un site sans aucune visite renvoie une
-   * seule ligne (annee et statut à null).
+   * Sites d'un module
    */
-  getSitesExport(
-    moduleCode: string,
-    method: string,
-    params: { [key: string]: any } = {}
-  ): Observable<any[]> {
-    return this._http.get<any[]>(`${this.baseUrl()}/exports/csv/${moduleCode}/${method}`, {
-      params: { ...params, format: 'json' },
-    });
-  }
-
-  /**
-   * Détail des visites d'un site (voir SubModuleConfig.visit_export_name), via
-   * la même route générique d'export.
-   */
-  getVisitsExport(
+  getJsonExport(
     moduleCode: string,
     method: string,
     params: { [key: string]: any } = {}
