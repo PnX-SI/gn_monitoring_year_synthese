@@ -1,15 +1,15 @@
-<div class="repro-visit-panel">
+<div class="visit-panel">
   <ng-container *ngIf="site; else noSite">
-    <div class="repro-visit-panel-header">
+    <div class="visit-panel-header">
       <div>
-        <h6 class="repro-visit-panel-title">{{ site.base_site_name }}</h6>
-        <p class="text-muted repro-visit-panel-module">{{ site.module_label }}</p>
+        <h6 class="visit-panel-title">{{ site.base_site_name }}</h6>
+        <p class="text-muted visit-panel-module">{{ site.module_label }}</p>
       </div>
-      <div class="repro-visit-panel-header-actions">
+      <div class="visit-panel-header-actions">
         <a
           mat-mini-fab
           color="primary"
-          class="repro-visit-panel-add-fab"
+          class="visit-panel-add-fab"
           disableRipple="true"
           [routerLink]="['/monitorings', 'create_object', site.module_code, 'visit']"
           [queryParams]="{ id_base_site: site.id_base_site, parents_path: 'site' }"
@@ -21,7 +21,7 @@
           *ngIf="moduleConfig?.visit_export_name"
           mat-mini-fab
           color="primary"
-          class="repro-visit-panel-download-fab"
+          class="visit-panel-download-fab"
           disableRipple="true"
           target="_blank"
           matTooltip="Télécharger les visites du site"
@@ -32,12 +32,12 @@
       </div>
     </div>
 
-    <mat-accordion *ngIf="site.visites?.length; else noVisit" class="repro-visit-panel-list">
+    <mat-accordion *ngIf="site.visites?.length; else noVisit" class="visit-panel-list">
       <mat-expansion-panel *ngFor="let visite of sortedVisites">
         <mat-expansion-panel-header class="mr-3">
           <span class="panel-title">{{ visitLabel(visite) }}</span>
           <a
-            class="repro-visit-panel-info-link"
+            class="visit-panel-info-link"
             [routerLink]="[
               '/monitorings',
               'object',
@@ -53,14 +53,14 @@
           </a>
         </mat-expansion-panel-header>
 
-        <div class="repro-visit-panel-field" *ngFor="let field of genericFields(visite)">
-          <span class="repro-visit-panel-field-label">{{ field.key  | titlecase}}</span>
-          <span class="repro-visit-panel-field-value">{{ field.value }}</span>
+        <div class="visit-panel-field" *ngFor="let field of genericFields(visite)">
+          <span class="visit-panel-field-label">{{ field.key  | titlecase}}</span>
+          <span class="visit-panel-field-value">{{ field.value }}</span>
         </div>
 
-        <div class="repro-visit-panel-field" *additionalFields="let field of additionalData(visite)">
-          <span class="repro-visit-panel-field-label">{{ field.label | titlecase }}</span>
-          <span class="repro-visit-panel-field-value">{{ field.value }}</span>
+        <div class="visit-panel-field" *additionalFields="let field of additionalData(visite)">
+          <span class="visit-panel-field-label">{{ field.label | titlecase }}</span>
+          <span class="visit-panel-field-value">{{ field.value }}</span>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
@@ -70,6 +70,6 @@
   </ng-container>
 
   <ng-template #noSite>
-    <p class="text-muted repro-visit-panel-empty">Cliquez sur un site pour voir ses contrôles</p>
+    <p class="text-muted visit-panel-empty">Cliquez sur un site pour voir ses contrôles</p>
   </ng-template>
 </div>

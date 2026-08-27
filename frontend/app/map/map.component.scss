@@ -1,12 +1,12 @@
-.repro-map-container {
+.map-container {
   padding: 1em;
 }
 
-.repro-map-header {
+.map-header {
   margin-bottom: 0.5em;
 }
 
-.repro-loading-overlay {
+.loading-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.35);
@@ -16,24 +16,24 @@
   z-index: 2000; // au-dessus des panes Leaflet
 }
 
-.repro-map-body {
+.map-body {
   display: flex;
   gap: 1em;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 170px);
 }
 
-.repro-map-map {
+.map-canvas {
   position: relative;
   flex: 1;
   min-width: 0;
   height: 100%;
 }
 
-.repro-legend {
+.legend {
   position: absolute;
   bottom: 1.5em;
   left: 0.5em;
-  z-index: 1000; // au-dessus des panes Leaflet, sous repro-loading-overlay
+  z-index: 1000; // au-dessus des panes Leaflet, sous loading-overlay
   display: flex;
   gap: 0.75em;
   background-color: rgba(255, 255, 255, 0.9);
@@ -43,7 +43,7 @@
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.15);
 }
 
-.repro-legend-group {
+.legend-group {
   display: flex;
   flex-direction: column;
 
@@ -53,12 +53,12 @@
   }
 }
 
-.repro-legend-title {
+.legend-title {
   font-weight: 600;
   margin-bottom: 0.25em;
 }
 
-.repro-legend-item {
+.legend-item {
   display: flex;
   align-items: center;
   gap: 0.4em;
@@ -72,7 +72,7 @@
   font-size: 0.8em;
 }
 
-.repro-legend-swatch {
+.legend-swatch {
   display: inline-block;
   width: 10px;
   height: 10px;
@@ -81,21 +81,21 @@
   flex-shrink: 0;
 }
 
-.repro-site-panel {
+.site-panel {
   width: 400px;
   flex-shrink: 0;
   height: 100%;
 }
 
-.repro-visit-panel-container {
+.visit-panel-container {
   width: 350px;
   flex-shrink: 0;
   height: 100%;
   border-left: 1px solid #e0e0e0;
 }
 
-.repro-tab-add-fab,
-.repro-tab-download-fab {
+.tab-add-fab,
+.tab-download-fab {
   color : #fff;
   // mat-mini-fab est trop grand pour la barre d'onglets : on le réduit avec
   // un transform (contrairement à width/height, ça met aussi le ripple et
@@ -116,7 +116,7 @@
   }
 }
 
-.repro-header-download-fab {
+.header-download-fab {
   margin-left: 0.75em;
 
   &,
@@ -130,20 +130,28 @@
   }
 }
 
-.repro-site-tabs {
+.site-tabs {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
+// Marge entre les onglets et le contenu (input de filtre de site-list) :
+// mat-tab-header appartient au DOM interne de mat-tab-group, pas au
+// template de ce composant ni de site-list, donc pas d'autre moyen de le
+// cibler que ::ng-deep depuis ici (où <mat-tab-group> est déclaré).
+::ng-deep .site-tabs .mat-mdc-tab-header {
+  margin-bottom: 0.5em;
+}
+
 // mat-tab-group ne fait pas grandir son contenu par défaut : on force le
-// wrapper à occuper l'espace restant pour que repro-site-list (qui gère son
+// wrapper à occuper l'espace restant pour que site-list (qui gère son
 // propre scroll interne) puisse remplir toute la hauteur disponible.
-::ng-deep .repro-site-tabs .mat-mdc-tab-body-wrapper {
+::ng-deep .site-tabs .mat-mdc-tab-body-wrapper {
   flex: 1;
   min-height: 0;
 }
 
-::ng-deep .repro-site-tabs .mat-mdc-tab-body-content {
+::ng-deep .site-tabs .mat-mdc-tab-body-content {
   height: 100%;
 }

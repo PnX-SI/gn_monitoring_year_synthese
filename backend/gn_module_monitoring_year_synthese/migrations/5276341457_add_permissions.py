@@ -1,6 +1,6 @@
 """add permissions
 
-Revision ID: 5276341457999
+Revision ID: 527634145454566454
 Create Date: 2026-08-19
 
 """
@@ -9,9 +9,9 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "5276341457999"
+revision = "527634145454566454"
 down_revision = None  # A changer si modification faite dans le fichier [revisionID]_create_template_schema.py
-branch_labels = ("monitoring_repro",)
+branch_labels = ("monitoring_year_synthese",)
 depends_on = None
 
 
@@ -20,7 +20,7 @@ def upgrade():
         """
             INSERT INTO gn_permissions.t_objects (code_object, description_object)
             VALUES (
-                'MONITORING_REPRO', 
+                'MONITORING_YEAR_SYNTHESE', 
                 'Module pour le visualisation des monitoring de reproduction'
             )
         """
@@ -30,8 +30,8 @@ def upgrade():
             INSERT INTO gn_permissions.cor_object_module
                 (id_object, id_module)
             VALUES(
-	            (SELECT id_object FROM gn_permissions.t_objects WHERE code_object = 'MONITORING_REPRO'),
-	            (SELECT id_module FROM gn_commons.t_modules WHERE module_code = 'MONITORING_REPRO')
+	            (SELECT id_object FROM gn_permissions.t_objects WHERE code_object = 'MONITORING_YEAR_SYNTHESE'),
+	            (SELECT id_module FROM gn_commons.t_modules WHERE module_code = 'MONITORING_YEAR_SYNTHESE')
             )
         """
     )
@@ -54,7 +54,7 @@ def upgrade():
         FROM
             (
                 VALUES
-                    ('MONITORING_REPRO', 'MONITORING_REPRO', 'R', True, 'Voir le module')
+                    ('MONITORING_YEAR_SYNTHESE', 'MONITORING_YEAR_SYNTHESE', 'R', True, 'Voir le module')
             ) AS v (module_code, object_code, action_code, scope_filter, label)
         JOIN
             gn_commons.t_modules m ON m.module_code = v.module_code
@@ -71,7 +71,7 @@ def upgrade():
 	            p.id_role,
 	            p.id_action,
 	            p.id_module,
-	            (SELECT id_object FROM gn_permissions.t_objects WHERE code_object = 'MONITORING_REPRO') as id_object,
+	            (SELECT id_object FROM gn_permissions.t_objects WHERE code_object = 'MONITORING_YEAR_SYNTHESE') as id_object,
 	            p.scope_value,
 	            p.sensitivity_filter
             FROM 
@@ -83,7 +83,7 @@ def upgrade():
 	            gn_permissions.t_objects o
 	            USING (id_object)
             WHERE
-	            m.module_code = 'MONITORING_REPRO'
+	            m.module_code = 'MONITORING_YEAR_SYNTHESE'
 	            AND o.code_object = 'ALL'
         )
         INSERT INTO gn_permissions.t_permissions
@@ -101,7 +101,7 @@ def upgrade():
             JOIN gn_commons.t_modules m
                     USING (id_module)
             WHERE
-                m.module_code = 'MONITORING_REPRO'
+                m.module_code = 'MONITORING_YEAR_SYNTHESE'
             EXCEPT
             SELECT
                 p.id_permission
@@ -132,7 +132,7 @@ def downgrade():
         WHERE
             pa.id_module = m.id_module
             AND
-            module_code = 'MONITORING_REPRO'
+            module_code = 'MONITORING_YEAR_SYNTHESE'
         """
     )
     op.execute(
@@ -145,13 +145,13 @@ def downgrade():
         WHERE
             p.id_module = m.id_module
             AND
-            module_code = 'MONITORING_REPRO'
+            module_code = 'MONITORING_YEAR_SYNTHESE'
             AND
             p.id_object = o.id_object
             AND
-            code_object = 'MONITORING_REPRO'
+            code_object = 'MONITORING_YEAR_SYNTHESE'
         """
     )
     op.execute(
-        "DELETE FROM gn_permissions.t_objects WHERE code_object = 'MONITORING_REPRO'"
+        "DELETE FROM gn_permissions.t_objects WHERE code_object = 'MONITORING_YEAR_SYNTHESE'"
     )

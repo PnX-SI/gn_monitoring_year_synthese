@@ -1,17 +1,17 @@
-<div class="repro-map-container card">
-  <div class="repro-map-header d-flex justify-content-between align-items-center">
+<div class="map-container card">
+  <div class="map-header d-flex justify-content-between align-items-center">
     <h5>{{ pageConfig?.page_label || pageConfig?.page_code }}</h5>
     <div class="d-flex align-items-center">
-      <repro-year-selector
+      <mys-year-selector
         [years]="years"
         [selectedYear]="selectedYear"
         (yearChange)="onYearChange($event)"
-      ></repro-year-selector>
+      ></mys-year-selector>
       <a
         *ngIf="hasVisitExport"
         mat-mini-fab
         color="primary"
-        class="repro-header-download-fab"
+        class="header-download-fab"
         disableRipple="true"
         matTooltip="Télécharger toutes les visites de l'année"
         (click)="downloadAllVisits()"
@@ -21,21 +21,21 @@
     </div>
   </div>
 
-  <div class="repro-loading-overlay" *ngIf="loading">
+  <div class="loading-overlay" *ngIf="loading">
     <mat-spinner diameter="48"></mat-spinner>
   </div>
 
-  <div class="repro-map-body">
-    <div class="repro-site-panel">
+  <div class="map-body">
+    <div class="site-panel">
       <!-- Un onglet par sous-module de la page. -->
-      <mat-tab-group class="repro-site-tabs">
-        <mat-tab *ngFor="let moduleConfig of pageConfig?.modules">
+      <mat-tab-group class="site-tabs">
+        <mat-tab class="mb-2" *ngFor="let moduleConfig of pageConfig?.modules">
           <ng-template mat-tab-label>
             <span class="tab-label">{{ moduleConfig.module_label || moduleConfig.module_code }}</span>
             <a
               mat-mini-fab
               color="primary"
-              class="repro-tab-add-fab"
+              class="tab-add-fab"
               disableRipple="true"
               [routerLink]="['/monitorings', 'object', moduleConfig.module_code, 'site', 'create']"
               [queryParams]="{ parents_path: 'module' }"
@@ -49,7 +49,7 @@
             <a
               mat-mini-fab
               color="primary"
-              class="repro-tab-download-fab"
+              class="tab-download-fab"
               disableRipple="true"
               [matTooltip]="
                 'Télécharger les sites ' + (moduleConfig.module_label || moduleConfig.module_code)
@@ -59,17 +59,17 @@
               <mat-icon>file_download</mat-icon>
             </a>
           </ng-template>
-          <repro-site-list
+          <mys-site-list
             [moduleConfig]="moduleConfig"
             [sites]="sitesByModuleCode[moduleConfig.module_code]"
             [selectedSiteId]="selectedSiteId"
             (siteClick)="selectSite($event)"
-          ></repro-site-list>
+          ></mys-site-list>
         </mat-tab>
       </mat-tab-group>
     </div>
 
-    <div class="repro-map-map">
+    <div class="map-canvas">
       <pnx-map height="100%" [zoom]="6">
         <pnx-geojson
           *ngIf="geojsonSites"
@@ -80,14 +80,14 @@
       </pnx-map>
 
       <!-- Une légende par sous-module : les legend_values ne sont pas les mêmes d'un sous-module à l'autre. -->
-      <div class="repro-legend">
-        <div class="repro-legend-group" *ngFor="let moduleConfig of pageConfig?.modules">
-          <div class="repro-legend-title">
+      <div class="legend">
+        <div class="legend-group" *ngFor="let moduleConfig of pageConfig?.modules">
+          <div class="legend-title">
             {{ moduleConfig.module_label || moduleConfig.module_code }}
           </div>
-          <div class="repro-legend-item" *ngFor="let value of moduleConfig.legend_values">
+          <div class="legend-item" *ngFor="let value of moduleConfig.legend_values">
             <span
-              class="repro-legend-swatch"
+              class="legend-swatch"
               [style.backgroundColor]="moduleConfig.site_geom_type === 'point' ? null : value.color"
               [style.borderColor]="moduleConfig.site_geom_type === 'point' ? value.color : null"
             ></span>
@@ -97,11 +97,11 @@
       </div>
     </div>
 
-    <repro-visit-panel
-      class="repro-visit-panel-container"
+    <mys-visit-panel
+      class="visit-panel-container"
       [site]="selectedSite"
       [moduleConfig]="selectedModuleConfig"
       [selectedYear]="selectedYear"
-    ></repro-visit-panel>
+    ></mys-visit-panel>
   </div>
 </div>

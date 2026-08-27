@@ -1,19 +1,21 @@
-# MonitoringRepro
+# Monitoring year synthese
+
+![Aperçu du module](assets/image.png)
 
 Module GeoNature pour la visualisation cartographique des données monitoring par année.
 
-Ce module n'a pas de backend applicatif propre : il consomme directement
-l'API HTTP de `gn_module_monitoring`. C'est un simple frontend Angular.
+Ce module n'a pas de backend propre : il consomme directement
+l'API de `gn_module_monitoring`. C'est un simple frontend Angular.
 
 Pour faire fonctionner le module il est nécéssaire au préalable de créer un export monitoring qui remet à plat tout les sites du modules pour chaque année (voir l'exemple plus bas). Cet export doit contenir un champs sur lequel la légende de la carte va s'appuyer
 
 ## Configuration
 
-Copier `module_code_config.toml.example` en
-`config/monitoring_repro_config.toml` dans l'instance GeoNature, et déclarer
-un bloc `[[PAGES]]` par page (route) du module. Une page peut combiner
+Copier `monitoring_year_synthese_config.toml.example` en
+`config/monitoring_year_synthese_config.toml.example` dans le répertoire de GeoNature, et déclarer
+un bloc `[[PAGES]]` par sous module monitoring. Une page peut combiner
 plusieurs sous-modules gn_module_monitoring sur une même carte (ex: aigle +
-domaine_vital) ; chaque sous-module garde ses propres critères de succès :
+domaine_vital)
 
 Ci dessous un exemple de configuration qui se base sur le module STOM
 

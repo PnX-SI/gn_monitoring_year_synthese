@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'repro-year-selector',
+  selector: 'mys-year-selector',
   templateUrl: './year-selector.component.html',
   styleUrls: ['./year-selector.component.scss'],
 })

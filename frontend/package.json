@@ -1,7 +1,7 @@
 {
-  "name": "gn_module_monitoring_repro",
+  "name": "gn_module_monitoring_year_synthese",
   "version": "1.0.0",
-  "description": "Frontend pour gn_module_monitoring_repro",
+  "description": "Frontend pour gn_module_monitoring_year_synthese",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

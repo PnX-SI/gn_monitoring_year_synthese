@@ -1,0 +1,106 @@
+# Fichier listant les paramètres du module et leurs valeurs par défaut
+
+# Liste des pages (routes) du module. Chaque page combine les sites d'un ou
+# plusieurs sous-modules gn_module_monitoring sur une même carte ; chaque
+# sous-module garde ses propres critères de succès.
+
+[[PAGES]]
+page_code = "aigle_domaine_vital"
+page_label = "Suivi de la reproduction des aigles royaux"
+
+# DOMAINE VITAUX
+[[PAGES.modules]]
+module_code = "domaine_vital"
+module_label = "Domaines vitaux"
+legend_field = "cd_statut_reproduction"
+site_geom_type = "polygon"
+site_export_name = "repro_status"
+visit_export_name = "visits"
+visit_label_field = "visite_label"
+visit_fields = [
+    "Durée visite",
+    "Comportement(s)",
+    "Nb jeune seul",
+    "Nb jeune avec adulte",
+    "Statut de reproduction",
+    "commentaire",
+]
+
+
+[[PAGES.modules.legend_values]]
+value = "9"
+label = "échec"
+color = "#c41313"
+
+[[PAGES.modules.legend_values]]
+value = "4"
+label = "2 jeunes envolés"
+color = "#156b19"
+
+[[PAGES.modules.legend_values]]
+value = "3"
+label = "1 jeune envolé"
+color = "#69cc6e"
+
+[[PAGES.modules.legend_values]]
+value = "2"
+label = "reproduction en cours"
+color = "#dfdb0d"
+
+[[PAGES.modules.legend_values]]
+# "*no_match" : aussi utilisée quand des visites existent sans qu'aucune ne
+# corresponde à une valeur ci-dessus (ex. statut de reproduction non renseigné).
+value = "1"
+label = "pas de conclusion possible"
+color = "#fdfdfd"
+
+[[PAGES.modules.legend_values]]
+# "*no_data" : utilisée quand le site n'a aucune visite sur l'année.
+value = "0"
+label = "pas de données"
+color = "#bdbdbd"
+
+[[PAGES.modules.legend_values]]
+value = "8"
+label = "pas de reproduction constatée"
+color = "#0e0d0de1"
+
+###################
+#### AIGLE ########
+###################
+[[PAGES.modules]]
+module_code = "aigle"
+module_label = "Aire"
+
+legend_field = "activite_aire"
+site_export_name = "sites_bilan_annuel"
+visit_export_name = "visits"
+visit_label_field = "label_visit"
+visit_fields = [
+    "Activité à l'aire",
+    "Durée visite",
+    "Nb adulte",
+    "Nb jeune blanc",
+    "Nb jeune envolé",
+    "commentaire",
+]
+
+[[PAGES.modules.legend_values]]
+value = "Échec"
+label = "Échec"
+color = "#ff0000"
+
+[[PAGES.modules.legend_values]]
+value = "Activité noté sur l'aire"
+label = "Activité noté sur l'aire"
+color = "#00ff0d"
+
+[[PAGES.modules.legend_values]]
+value = "Aucune activité constatée"
+label = "Aucune activité constatée"
+color = "#ffb74d"
+
+[[PAGES.modules.legend_values]]
+value = "Aucune visite"
+label = "Aucune visite"
+color = "#757575"

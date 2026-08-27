@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ReproModuleConfig } from '../../interfaces/repro-config.interface';
+import { SubModuleConfig } from '../../interfaces/config.interface';
 import { MonitoringApiService } from '../../services/monitoring-api.service';
 import { downloadBlob } from '../../utils/download.util';
 
@@ -24,16 +24,16 @@ const EXCLUDED_GENERIC_FIELDS = [
 ];
 
 @Component({
-  selector: 'repro-visit-panel',
-  templateUrl: './repro-visit-panel.component.html',
-  styleUrls: ['./repro-visit-panel.component.scss'],
+  selector: 'mys-visit-panel',
+  templateUrl: './visit-panel.component.html',
+  styleUrls: ['./visit-panel.component.scss'],
 })
-export class ReproVisitPanelComponent {
+export class VisitPanelComponent {
   /** Site sélectionné (propriétés aplaties, avec sa clé `visites` de l'année en cours). */
   @Input() site: any;
 
   /** Config du sous-module du site sélectionné, pour visit_label_field. */
-  @Input() moduleConfig?: ReproModuleConfig;
+  @Input() moduleConfig?: SubModuleConfig;
 
   /** Année en cours, pour filtrer le téléchargement CSV des visites du site. */
   @Input() selectedYear: number | null = null;

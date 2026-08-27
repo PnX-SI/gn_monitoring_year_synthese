@@ -7,29 +7,29 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { GN2CommonModule } from '@geonature_common/GN2Common.module';
 
 import { HomeComponent } from './home/home.component';
-import { ReproMapComponent } from './repro-map/repro-map.component';
+import { MapComponent } from './map/map.component';
 import { YearSelectorComponent } from './components/year-selector/year-selector.component';
-import { ReproSiteListComponent } from './components/repro-site-list/repro-site-list.component';
-import { ReproVisitPanelComponent } from './components/repro-visit-panel/repro-visit-panel.component';
-import { ReproPageConfigResolver } from './resolvers/repro-page-config.resolver';
+import { SiteListComponent } from './components/site-list/site-list.component';
+import { VisitPanelComponent } from './components/visit-panel/visit-panel.component';
+import { PageConfigResolver } from './resolvers/page-config.resolver';
 
 // my module routing
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {
     path: ':pageCode',
-    component: ReproMapComponent,
-    resolve: { pageConfig: ReproPageConfigResolver },
+    component: MapComponent,
+    resolve: { pageConfig: PageConfigResolver },
   },
 ];
 
 @NgModule({
   declarations: [
     HomeComponent,
-    ReproMapComponent,
+    MapComponent,
     YearSelectorComponent,
-    ReproSiteListComponent,
-    ReproVisitPanelComponent,
+    SiteListComponent,
+    VisitPanelComponent,
   ],
   imports: [
     GN2CommonModule,

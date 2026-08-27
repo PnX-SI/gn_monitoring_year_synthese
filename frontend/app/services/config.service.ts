@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ConfigService as GnConfigService } from '@geonature/services/config.service';
-import { ReproPageConfig } from '../interfaces/repro-config.interface';
+import { PageConfig } from '../interfaces/config.interface';
 
 @Injectable({ providedIn: 'root' })
-export class ReproConfigService {
+export class ConfigService {
   constructor(private _appConfig: GnConfigService) {}
 
-  get pages(): ReproPageConfig[] {
-    return (this._appConfig as any)['MONITORING_REPRO']?.PAGES ?? [];
+  get pages(): PageConfig[] {
+    return (this._appConfig as any)['MONITORING_YEAR_SYNTHESE']?.PAGES ?? [];
   }
 
-  getPageConfig(pageCode: string): ReproPageConfig | undefined {
+  getPageConfig(pageCode: string): PageConfig | undefined {
     return this.pages.find((p) => p.page_code === pageCode);
   }
 }

@@ -1,21 +1,21 @@
-.repro-site-list {
+.site-list {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
   height: 100%;
 }
 
-.repro-site-table-wrapper {
+.site-table-wrapper {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
 }
 
-.repro-site-table {
+.site-table {
   width: 100%;
 }
 
-.repro-site-row {
+.site-row {
   cursor: pointer;
 
   &:hover {
@@ -23,7 +23,7 @@
   }
 }
 
-.repro-site-row-selected {
+.site-row-selected {
   background-color: #e3f2fd;
 
   &:hover {
@@ -31,7 +31,7 @@
   }
 }
 
-.repro-site-empty {
+.site-empty {
   padding: 0.5em;
 }
 
@@ -41,7 +41,7 @@
   text-align: center;
 }
 
-.repro-site-badge {
+.site-badge {
   display: inline-block;
   width: 12px;
   height: 12px;

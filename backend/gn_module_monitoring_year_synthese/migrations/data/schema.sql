@@ -18,10 +18,10 @@ SET
 
 --------------
 --------------
-CREATE SCHEMA IF NOT EXISTS gn_monitoring_repro;
+CREATE SCHEMA IF NOT EXISTS gn_monitoring_year_synthese;
 
 SET
-    search_path = gn_monitoring_repro,
+    search_path = gn_monitoring_year_synthese,
     pg_catalog,
     public;
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReproModuleConfig, ReproSuccessValue } from '../interfaces/repro-config.interface';
+import { SubModuleConfig, LegendValue } from '../interfaces/config.interface';
 
 
 /**
@@ -7,13 +7,13 @@ import { ReproModuleConfig, ReproSuccessValue } from '../interfaces/repro-config
  * par la vue d'export SQL d'un site par année(site_export_name)
  */
 @Injectable({ providedIn: 'root' })
-export class ReproLegendService {
+export class LegendService {
   /**
    * Résultat d'un site (un enregistrement de la vue d'export, déjà filtré
    * sur l'année sélectionnée), ou `null` si le module ne déclare pas de
    * legend_values qui match
    */
-  getSiteResult(row: any, config: ReproModuleConfig): ReproSuccessValue | null {
+  getSiteResult(row: any, config: SubModuleConfig): LegendValue | null {
     const legendItems = config.legend_values || [];
     const rawValue = config.legend_field ? row?.[config.legend_field] : undefined;
 

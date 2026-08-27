@@ -3,5 +3,5 @@ from flask import Blueprint
 
 
 blueprint = Blueprint(
-    "monitoring_repro", __name__
+    "monitoring_year_synthese", __name__
 )

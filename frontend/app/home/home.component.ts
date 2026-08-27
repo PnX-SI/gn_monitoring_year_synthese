@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ReproConfigService } from '../services/repro-config.service';
-import { ReproPageConfig } from '../interfaces/repro-config.interface';
+import { ConfigService } from '../services/config.service';
+import { PageConfig } from '../interfaces/config.interface';
 
 @Component({
   selector: 'app-home',
@@ -8,11 +8,11 @@ import { ReproPageConfig } from '../interfaces/repro-config.interface';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  pages: ReproPageConfig[] = [];
+  pages: PageConfig[] = [];
 
-  constructor(private _reproConfig: ReproConfigService) {}
+  constructor(private _config: ConfigService) {}
 
   ngOnInit() {
-    this.pages = this._reproConfig.pages;
+    this.pages = this._config.pages;
   }
 }

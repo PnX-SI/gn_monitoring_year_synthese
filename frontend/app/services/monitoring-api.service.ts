@@ -30,7 +30,7 @@ export class MonitoringApiService {
   /**
    * Sites d'un module, un enregistrement par site et par année, déjà
    * accompagnés de leur résultat de reproduction (voir
-   * ReproModuleConfig.site_export_name), via la vue SQL
+   * SubModuleConfig.site_export_name), via la vue SQL
    * gn_monitoring.v_export_<moduleCode>_<method> et la route générique
    * d'export de gn_module_monitoring. Un site sans aucune visite renvoie une
    * seule ligne (annee et statut à null).
@@ -46,7 +46,7 @@ export class MonitoringApiService {
   }
 
   /**
-   * Détail des visites d'un site (voir ReproModuleConfig.visit_export_name), via
+   * Détail des visites d'un site (voir SubModuleConfig.visit_export_name), via
    * la même route générique d'export.
    */
   getVisitsExport(

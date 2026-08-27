@@ -7,16 +7,16 @@ import { MonitoringPaginatedResult } from '../interfaces/monitoring.interface';
 import { downloadBlob } from '../utils/download.util';
 
 import { MonitoringApiService } from '../services/monitoring-api.service';
-import { ReproLegendService } from '../services/repro-legend.service';
-import { ReproModuleConfig, ReproPageConfig } from '../interfaces/repro-config.interface';
+import { LegendService } from '../services/legend.service';
+import { SubModuleConfig, PageConfig } from '../interfaces/config.interface';
 
 @Component({
-  selector: 'repro-map',
-  templateUrl: './repro-map.component.html',
-  styleUrls: ['./repro-map.component.scss'],
+  selector: 'mys-map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.scss'],
 })
-export class ReproMapComponent implements OnInit {
-  pageConfig!: ReproPageConfig;
+export class MapComponent implements OnInit {
+  pageConfig!: PageConfig;
   years: number[] = [];
   selectedYear: number;
   geojsonSites: any = null;
@@ -43,8 +43,8 @@ export class ReproMapComponent implements OnInit {
     return site ? { ...site, visites: this.selectedSiteVisites } : null;
   }
 
-  /** Config du sous-module du site sélectionné (pour repro-visit-panel : visit_label_field). */
-  get selectedModuleConfig(): ReproModuleConfig | null {
+  /** Config du sous-module du site sélectionné (pour visit-panel : visit_label_field). */
+  get selectedModuleConfig(): SubModuleConfig | null {
     return this.pageConfig?.modules.find((m) => m.module_code === this.selectedModuleCode) ?? null;
   }
 
@@ -86,7 +86,7 @@ export class ReproMapComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _monitoringApi: MonitoringApiService,
-    private _reproSuccess: ReproLegendService,
+    private _legend: LegendService,
     private _mapService: MapService
   ) {}
 
@@ -211,7 +211,7 @@ export class ReproMapComponent implements OnInit {
     });
   }
 
-  downloadModuleSites(moduleConfig: ReproModuleConfig) {
+  downloadModuleSites(moduleConfig: SubModuleConfig) {
     this._monitoringApi
       .downloadExport(moduleConfig.module_code, moduleConfig.site_export_name, {
         annee: this.selectedYear,
@@ -241,7 +241,7 @@ export class ReproMapComponent implements OnInit {
   }
 
   private loadSites(
-    moduleConfig: ReproModuleConfig,
+    moduleConfig: SubModuleConfig,
     year: number
   ): Observable<{ moduleCode: string; sites: any[] }> {
     const moduleCode = moduleConfig.module_code;
@@ -259,7 +259,7 @@ export class ReproMapComponent implements OnInit {
               base_site_name: row.base_site_name,
               module_code: moduleCode,
               module_label: moduleConfig.module_label || moduleCode,
-              result: this._reproSuccess.getSiteResult(row, moduleConfig),
+              result: this._legend.getSiteResult(row, moduleConfig),
             },
           })),
         }))

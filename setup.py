@@ -12,26 +12,25 @@ with (root_dir / "requirements.in").open() as f:
 
 
 setuptools.setup(
-    name="MonitoringRepro",
+    name="MonitoringYearSynthese",
     version=version,
-    description="Module pour le visualisation des monitoring de reproduction",
+    description="Module pour le visualisation des monitoring par année",
     long_description=long_description,
     long_description_content_type="text/markdown",
     maintainer="Parc National des Ecrins",
     maintainer_email="geonature@ecrins-parcnational.fr",
-    url="https://github.com/PnX-SI/gn_module_monitoring_repro",
     packages=setuptools.find_packages("backend"),
     package_dir={"": "backend"},
-    package_data={"gn_module_monitoring_repro.migrations": ["data/*.sql"]},
+    package_data={"gn_module_monitoring_year_synthese.migrations": ["data/*.sql"]},
     install_requires=requirements,
     zip_safe=False,
     entry_points={
         "gn_module": [
-            "code = gn_module_monitoring_repro:MODULE_CODE",
-            "picto = gn_module_monitoring_repro:MODULE_PICTO",
-            "blueprint = gn_module_monitoring_repro.blueprint:blueprint",
-            "config_schema = gn_module_monitoring_repro.conf_schema_toml:GnModuleSchemaConf",
-            "migrations = gn_module_monitoring_repro:migrations",
+            "code = gn_module_monitoring_year_synthese:MODULE_CODE",
+            "picto = gn_module_monitoring_year_synthese:MODULE_PICTO",
+            "blueprint = gn_module_monitoring_year_synthese.blueprint:blueprint",
+            "config_schema = gn_module_monitoring_year_synthese.conf_schema_toml:GnModuleSchemaConf",
+            "migrations = gn_module_monitoring_year_synthese:migrations",
         ],
     },
     classifiers=[
