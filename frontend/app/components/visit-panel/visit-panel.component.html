@@ -11,6 +11,7 @@
           color="primary"
           class="visit-panel-add-fab"
           disableRipple="true"
+          target="_blank"
           [routerLink]="['/monitorings', 'create_object', site.module_code, 'visit']"
           [queryParams]="{ id_base_site: site.id_base_site, parents_path: 'site' }"
           matTooltip="Ajouter une visite"
