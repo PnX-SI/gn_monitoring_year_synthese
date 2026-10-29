@@ -94,33 +94,26 @@ export class MapComponent implements OnInit {
     this.pageConfig = this._route.snapshot.data.pageConfig;
     this.loading = true;
 
-    // On propose toutes les années depuis la toute première visite du
-    // premier sous-module de la page jusqu'à aujourd'hui (un seul appel).
-    const firstModuleCode = this.pageConfig.modules[0].module_code;
-    this._monitoringApi
-      .getVisits(firstModuleCode, { limit: 1, sort: 'visit_date_min', sort_dir: 'asc' })
-      .subscribe((result: any) => {
-        const oldestYear = this.extractYear(result.items[0]?.visit_date_min);
-        const currentYear = new Date().getFullYear();
-
-        this.years = [];
-        for (let year = currentYear; year >= (oldestYear ?? currentYear); year--) {
-          this.years.push(year);
+    // On propose toutes les années présentes dans les vues d'export de sites
+    // (site_export_name, non paginées) de tous les sous-modules de la page.
+    const perModuleRows$ = this.pageConfig.modules.map((moduleConfig) =>
+      this._monitoringApi.getJsonExport(moduleConfig.module_code, moduleConfig.site_export_name)
+    );
+    forkJoin(perModuleRows$).subscribe((results: any[][]) => {
+      const currentYear = new Date().getFullYear();
+      const years = new Set<number>();
+      for (const rows of results) {
+        for (const row of rows) {
+          years.add(Number(row.annee));
         }
+      }
+      this.years = [...years].sort((a, b) => b - a);
 
-        const yearParam = Number(this._route.snapshot.queryParamMap.get('year'));
-        const defaultYear = this.years[0] ?? currentYear;
-        const initialYear = this.years.includes(yearParam) ? yearParam : defaultYear;
-        this.onYearChange(initialYear);
-      });
-  }
-
-  private extractYear(dateStr: string): number | null {
-    if (!dateStr) {
-      return null;
-    }
-    const year = new Date(dateStr).getFullYear();
-    return Number.isNaN(year) ? null : year;
+      const yearParam = Number(this._route.snapshot.queryParamMap.get('year'));
+      const defaultYear = this.years[0] ?? currentYear;
+      const initialYear = this.years.includes(yearParam) ? yearParam : defaultYear;
+      this.onYearChange(initialYear);
+    });
   }
 
   onYearChange(year: number) {
