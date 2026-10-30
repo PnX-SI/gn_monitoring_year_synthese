@@ -10,13 +10,15 @@ from marshmallow import Schema, fields
 
 class LegendValueSchema(Schema):
     """
-    Une valeur possible du champ de résultat, avec son affichage : couleur
-    (carte + pastille de la liste) et libellé (légende de la carte).
+    Une valeur possible du champ de résultat, avec son affichage : style
+    Leaflet (carte + pastille de la liste) et libellé (légende de la carte).
+    style accepte toutes les options de style Leaflet (color, weight, opacity,
+    fillColor, fillOpacity, radius, dashArray...).
     """
 
     value = fields.String(required=True)
     label = fields.String(required=True)
-    color = fields.String(required=True)
+    style = fields.Dict(keys=fields.String(), required=True)
 
 
 class SubModuleConfigSchema(Schema):

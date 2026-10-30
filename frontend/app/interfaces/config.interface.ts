@@ -1,7 +1,8 @@
 export interface LegendValue {
   value: string[];
   label: string;
-  color: string;
+  // options de style Leaflet (color, weight, opacity, fillColor, fillOpacity, radius...)
+  style: { [key: string]: any };
 }
 
 export interface SubModuleConfig {

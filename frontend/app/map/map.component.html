@@ -89,8 +89,8 @@
           <div class="legend-item" *ngFor="let value of moduleConfig.legend_values">
             <span
               class="legend-swatch"
-              [style.backgroundColor]="moduleConfig.site_geom_type === 'point' ? null : value.color"
-              [style.borderColor]="moduleConfig.site_geom_type === 'point' ? value.color : null"
+              [style.backgroundColor]="value.style?.fillColor"
+              [style.borderColor]="value.style?.color"
             ></span>
             {{ value.label }}
           </div>

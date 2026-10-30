@@ -34,17 +34,18 @@ page_label = "STOM"
     [[PAGES.modules.legend_values]]
     value = "pas de visite"
     label = "Pas de visite"
-    color = "#bdbdbd"
+    style = { fillColor = "#ff0000", fillOpacity = 1, color = "#000", weight = 1 }
+ # toutes les options de style leaflet sont disponibles
 
     [[PAGES.modules.legend_values]]
     value = "1 à 10 visite"
     label = "1 à 10 visites"
-    color = "#66bb6a"
+    style = { color = "#66bb6a" }
 
     [[PAGES.modules.legend_values]]
     value = "plus de 10 visite"
     label = "Plus de 10 visites"
-    color = "#1b5e20"
+    style = { color = "#1b5e20" }
 ```
 
 Autres paramètre :

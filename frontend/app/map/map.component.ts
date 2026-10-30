@@ -55,21 +55,11 @@ export class MapComponent implements OnInit {
 
   onEachSiteFeature = (feature: any, layer: any) => {
     const { result } = feature.properties;
-    const isPoint = feature.geometry?.type === 'Point' || feature.geometry?.type === 'MultiPoint';
-
-    // Points : couleur sur le contour, fond transparent. Polygones : couleur sur le fond.
-    // Un site sans résultat connu (pas de *no_data/*no_match déclaré pour ce module) n'a
-    // pas de couleur : on omet alors la clé color/fillColor plutôt que de la passer à
-    // `undefined`, sans quoi Leaflet écraserait sa couleur par défaut avec `undefined` et
-    // le rendu Canvas hériterait de la dernière couleur valide tracée juste avant sur le
-    // canvas partagé (un site voisin pris au hasard), au lieu du bleu Leaflet par défaut.
-    const style: any = isPoint
-      ? { weight: 4, fillOpacity: 0, radius: 6 }
-      : { color: '#000', weight: 1, fillOpacity: result ? 0.7 : 0.3 };
-    if (result) {
-      style[isPoint ? 'color' : 'fillColor'] = result.color;
-    }
-    layer.setStyle(style);
+    // Style de la legend_value ; les options non renseignées gardent les défauts Leaflet.
+    // Un site sans résultat connu (pas de *no_data/*no_match déclaré pour ce module) garde
+    // le style Leaflet par défaut : surtout ne pas passer color/fillColor à `undefined`,
+    // sans quoi le rendu Canvas hériterait de la dernière couleur tracée sur le canvas partagé.
+    layer.setStyle(result?.style ?? {});
 
     layer.bindPopup(this.buildPopupContent(feature.properties, result?.label ?? 'Pas de donnée'));
     layer.on('click', () => this.selectSite(feature.properties));
